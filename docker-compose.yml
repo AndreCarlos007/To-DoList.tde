@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # ── Banco de dados PostgreSQL ────────────────────────────────────────────────
   db:
@@ -45,9 +43,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      # NEXT_PUBLIC_* são embutidas no bundle em tempo de build, por isso vão
-      # como build-args (apontam para localhost porque o browser do usuário
-      # é quem faz as chamadas, não o container).
       args:
         NEXT_PUBLIC_API_URL: http://localhost:3001
     container_name: todo_web

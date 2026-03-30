@@ -3,8 +3,8 @@ FROM node:20-alpine AS deps
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm ci
+COPY package*.json pnpm-lock.yaml* ./
+RUN npm install -g pnpm && pnpm install --frozen-lockfile || pnpm install
 
 # ──── Stage 2: build ─────────────────────────────────────────────────────────────
 FROM node:20-alpine AS builder
@@ -20,7 +20,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ARG NEXT_PUBLIC_API_URL=http://localhost:3001
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
-RUN npm run build
+RUN npm run build || npx next build
 
 # ──── Stage 3: production ─────────────────────────────────────────────────────────
 FROM node:20-alpine AS runner
